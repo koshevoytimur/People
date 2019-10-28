@@ -13,8 +13,6 @@ class StoreManager {
     func wrtiteHumansToLocalStorage(humansToStore: Humans) {
         let defaults = UserDefaults.standard
         defaults.set(try? PropertyListEncoder().encode(humansToStore), forKey: "humans")
-        
-        print("Humans stored")
     }
     
     func fetchHumansFromLocalStorage() -> Humans? {
@@ -22,8 +20,6 @@ class StoreManager {
         
         if let humans =  defaults.object(forKey: "humans") as? Data {
             let humans = try! PropertyListDecoder().decode(Humans.self, from: humans)
-            
-            print("Humans fetched from local storage")
             
             return humans
         } else {

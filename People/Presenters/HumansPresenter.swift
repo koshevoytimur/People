@@ -74,7 +74,6 @@ class HumansPresenter {
     }
     
     func sortHumans(sortTypeAscending: SortTypes, humanDataArray: [HumanData]) -> [HumanData] {
-        print("sortTypeAscending: \(sortTypeAscending)")
         switch sortTypeAscending {
         case .ascending_true:
             return humanDataArray.sorted(by: { $0.first_name! < $1.first_name! })

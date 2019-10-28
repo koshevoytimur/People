@@ -57,7 +57,6 @@
 			isa = PBXGroup;
 			children = (
 				D9028ED72363299E00681517 /* People */,
-				D9028EE3236329A200681517 /* LaunchScreen.storyboard */,
 				D9028ED62363299E00681517 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -138,6 +137,7 @@
 		D9CD88772365CA8600C71709 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D9028EE3236329A200681517 /* LaunchScreen.storyboard */,
 				D9028EDC2363299E00681517 /* HumansViewController.swift */,
 				D97E43F42363354800CE0DFC /* HumanTableViewCell.swift */,
 				D908C9AB2365D92B005F6E87 /* AlertView.swift */,
