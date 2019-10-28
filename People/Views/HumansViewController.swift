@@ -22,6 +22,7 @@ class HumansViewController: RootViewController, HumansPresenterDelegate {
     private let refreshControl = UIRefreshControl()
     private let alertView = AlertView()
     private let cellIdentifier = "humanCell"
+    private let cellHeight: CGFloat = 96.0
     var humanDataArray = [HumanData]()
     var sortType: SortTypes = SortTypes.sort_off
     
@@ -52,7 +53,8 @@ class HumansViewController: RootViewController, HumansPresenterDelegate {
         var charA: String? = nil
         var charB: String? = nil
         
-        if (!firstTextFieldOutlet.text!.isEmpty && !secondTextFieldOutlet.text!.isEmpty) && ((firstTextFieldOutlet.text! != " ") && (secondTextFieldOutlet.text! != " ")) {
+        if (!firstTextFieldOutlet.text!.isEmpty && !secondTextFieldOutlet.text!.isEmpty) &&
+            ((firstTextFieldOutlet.text! != " ") && (secondTextFieldOutlet.text! != " ")) {
             charA = firstTextFieldOutlet.text!
             charB = secondTextFieldOutlet.text!
         }
@@ -144,7 +146,7 @@ extension HumansViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 96.0
+        return cellHeight
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
