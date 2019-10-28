@@ -84,7 +84,7 @@ class HumansPresenter {
         }
     }
     
-    func deleteHumanFromLocalStorage(id: Int) {
+    func deleteHuman(id: Int) {
         storeManager.deleteHumanFromLocalStorage(id: id)
     }
     

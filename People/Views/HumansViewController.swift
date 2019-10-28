@@ -77,37 +77,41 @@ class HumansViewController: RootViewController, HumansPresenterDelegate {
         refreshControl.addTarget(self, action: #selector(refreshHumans(_:)), for: .valueChanged)
     }
     
-    @objc private func refreshHumans(_ sender: Any) {
-        loadHumans()
-    }
-    
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+    
+    func setSortButton(sortType: SortTypes) {
+        if sortType == .sort_off {
+            self.sortType = sortType
+            sortButtonOutlet.setImage(UIImage(named: SortTypes.sort_off.rawValue), for: UIControl.State.normal)
+            loadHumans()
+        } else {
+            self.sortType = sortType
+            sortButtonOutlet.setImage(UIImage(named: sortType.rawValue), for: UIControl.State.normal)
+            let sortedArray = presenter.sortHumans(sortTypeAscending: sortType, humanDataArray: self.humanDataArray)
+            self.humanDataArray = sortedArray
+            self.tableView.reloadData()
+        }
     }
     
     //MARK: - Actions
     @IBAction func sortButtonAction(_ sender: Any) {
         switch sortType {
         case .sort_off:
-            sortType = .ascending_true
-            sortButtonOutlet.setImage(UIImage(named: SortTypes.ascending_true.rawValue), for: UIControl.State.normal)
-            let sortedArray = presenter.sortHumans(sortTypeAscending: sortType, humanDataArray: self.humanDataArray)
-            self.humanDataArray = sortedArray
-            self.tableView.reloadData()
+            setSortButton(sortType: .ascending_true)
         case .ascending_true:
-            sortType = .ascending_false
-            sortButtonOutlet.setImage(UIImage(named: SortTypes.ascending_false.rawValue), for: UIControl.State.normal)
-            let sortedArray = presenter.sortHumans(sortTypeAscending: sortType, humanDataArray: self.humanDataArray)
-            self.humanDataArray = sortedArray
-            self.tableView.reloadData()
+            setSortButton(sortType: .ascending_false)
         case .ascending_false:
-            sortType = .sort_off
-            sortButtonOutlet.setImage(UIImage(named: SortTypes.sort_off.rawValue), for: UIControl.State.normal)
-            loadHumans()
+            setSortButton(sortType: .sort_off)
         }
     }
     
     @IBAction func selectWithLettersAction(_ sender: Any) {
+        loadHumans()
+    }
+    
+    @objc private func refreshHumans(_ sender: Any) {
         loadHumans()
     }
     
@@ -147,7 +151,7 @@ extension HumansViewController: UITableViewDelegate, UITableViewDataSource {
         
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") {  (contextualAction, view, boolValue) in
             let id = self.humanDataArray[indexPath.row].id
-            self.presenter.deleteHumanFromLocalStorage(id: id!)
+            self.presenter.deleteHuman(id: id!)
             self.loadHumans()
         }
         
