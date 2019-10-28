@@ -15,6 +15,7 @@ class HumansViewController: RootViewController, PresenterDelegate {
     @IBOutlet weak var sortButtonOutlet: UIButton!
     @IBOutlet weak var firstTextFieldOutlet: UITextField!
     @IBOutlet weak var secondTextFieldOutlet: UITextField!
+    @IBOutlet weak var selectWithLettersOutlet: UIButton!
     
     //MARK: - Properties
     lazy var presenter = Presenter(with: self)
@@ -22,7 +23,7 @@ class HumansViewController: RootViewController, PresenterDelegate {
     private let alertView = AlertView()
     private let cellIdentifier = "humanCell"
     var humanDataArray = [HumanData]()
-    var sortType: Int?
+    var sortType: SortTypes = SortTypes.sort_off
     
     //MARK: - Functions
     override func viewDidLoad() {
@@ -31,36 +32,40 @@ class HumansViewController: RootViewController, PresenterDelegate {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
-
+        
         firstTextFieldOutlet.delegate = self
         secondTextFieldOutlet.delegate = self
         
-        sortButtonOutlet.imageView?.image = UIImage(named: "sort")
+        sortButtonOutlet.imageView?.image = UIImage(named: "sort_off")
+        selectWithLettersOutlet.isEnabled = false
         
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         view.addGestureRecognizer(tap)
-
+        
         loadHumans()
         createRefreshControl()
     }
     
     func loadHumans() {
         showSpinner()
-        presenter.fetchHumans { (humans, error) in
-            if let error = error {
+        
+        var str: String? = nil
+        
+        if (!firstTextFieldOutlet.text!.isEmpty && !secondTextFieldOutlet.text!.isEmpty) && ((firstTextFieldOutlet.text! != " ") && (secondTextFieldOutlet.text! != " ")) {
+            str = firstTextFieldOutlet.text! + secondTextFieldOutlet.text!
+        }
+        
+        presenter.fetchFilteredHumans(sortTypeAscending: self.sortType, str: str) { (humanDataArray, error) in
+            if let unwrDataArray = humanDataArray {
+                self.humanDataArray = unwrDataArray
                 DispatchQueue.main.async {
-                    self.alertView.showAlert(view: self, title: "Error", message: error)
                     self.tableView.reloadData()
                     self.refreshControl.endRefreshing()
                     self.removeSpinner()
                 }
             } else {
-                self.humanDataArray = self.presenter.fetchSortedHumans(sortTypeAscending: self.sortType, humanDataArray: humans!.humanDataArray)
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.refreshControl.endRefreshing()
-                    self.removeSpinner()
-                }
+                self.removeSpinner()
+                self.alertView.showAlert(view: self, title: "Error", message: error!)
             }
         }
     }
@@ -78,60 +83,30 @@ class HumansViewController: RootViewController, PresenterDelegate {
         view.endEditing(true)
     }
     
+    //MARK: - Actions
     @IBAction func sortButtonAction(_ sender: Any) {
-        if sortType != nil {
-        } else {
-            self.sortType = 1
-        }
-        
         switch sortType {
-        case 0:
-            sortButtonOutlet.setImage(UIImage(named: "sort"), for: UIControl.State.normal)
-            sortType = 1
-        case 1:
-            sortButtonOutlet.setImage(UIImage(named: "ascending_true"), for: UIControl.State.normal)
-            self.humanDataArray = presenter.fetchSortedHumans(sortTypeAscending: sortType, humanDataArray: self.humanDataArray)
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.refreshControl.endRefreshing()
-            }
-            sortType = 2
-        case 2:
-            sortButtonOutlet.setImage(UIImage(named: "ascending_false"), for: UIControl.State.normal)
-            self.humanDataArray = presenter.fetchSortedHumans(sortTypeAscending: sortType, humanDataArray: self.humanDataArray)
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                self.refreshControl.endRefreshing()
-            }
-            sortType = 0
-        default:
-            sortButtonOutlet.setImage(UIImage(named: "sort"), for: UIControl.State.normal)
-            sortType = 0
+        case .sort_off:
+            sortType = .ascending_true
+            sortButtonOutlet.setImage(UIImage(named: SortTypes.ascending_true.rawValue), for: UIControl.State.normal)
+            let sortedArray = presenter.sortHumans(sortTypeAscending: sortType, humanDataArray: self.humanDataArray)
+            self.humanDataArray = sortedArray
+            self.tableView.reloadData()
+        case .ascending_true:
+            sortType = .ascending_false
+            sortButtonOutlet.setImage(UIImage(named: SortTypes.ascending_false.rawValue), for: UIControl.State.normal)
+            let sortedArray = presenter.sortHumans(sortTypeAscending: sortType, humanDataArray: self.humanDataArray)
+            self.humanDataArray = sortedArray
+            self.tableView.reloadData()
+        case .ascending_false:
+            sortType = .sort_off
+            sortButtonOutlet.setImage(UIImage(named: SortTypes.sort_off.rawValue), for: UIControl.State.normal)
+            loadHumans()
         }
     }
     
-    
     @IBAction func selectWithLettersAction(_ sender: Any) {
-        showSpinner()
-        var str: String? = nil
-
-        if (!firstTextFieldOutlet.text!.isEmpty && !secondTextFieldOutlet.text!.isEmpty) && ((firstTextFieldOutlet.text! != " ") && (secondTextFieldOutlet.text! != " ")) {
-            str = firstTextFieldOutlet.text! + secondTextFieldOutlet.text!
-        }
-        
-        presenter.fetchFilteredHumans(sortTypeAscending: nil, str: str) { (humanDataArray, error) in
-            if let humanDataArray = humanDataArray {
-                self.humanDataArray = humanDataArray
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.refreshControl.endRefreshing()
-                    self.removeSpinner()
-                }
-            } else {
-                self.removeSpinner()
-                print("ERROR OCCUR WHILE SORTING")
-            }
-        }
+        loadHumans()
     }
     
 }
@@ -183,10 +158,10 @@ extension HumansViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - TextField
 extension HumansViewController: UITextFieldDelegate {
-     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-         guard let text = textField.text else { return true }
-         let newLength = text.count + string.count - range.length
-         return newLength <= 1
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else { return true }
+        let newLength = text.count + string.count - range.length
+        return newLength <= 1
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -198,4 +173,13 @@ extension HumansViewController: UITextFieldDelegate {
         
         return true
     }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if (firstTextFieldOutlet.text!.count + secondTextFieldOutlet.text!.count) < 2 {
+            selectWithLettersOutlet.isEnabled = false
+        } else {
+            selectWithLettersOutlet.isEnabled = true
+        }
+    }
+    
 }

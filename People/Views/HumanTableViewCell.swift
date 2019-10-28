@@ -15,6 +15,8 @@ class HumanTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        avatarImageView.layer.cornerRadius = avatarImageView.frame.width / 2
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

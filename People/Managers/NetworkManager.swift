@@ -13,8 +13,9 @@ class NetworkManager {
     
     let HUMANS_URL = "https://reqres.in/api/users?page=2"
     
-    func getHumansURLSession(completion: @escaping (_ response: Humans?, _ error: String?) -> Void) {
+    func fetchHumans(completion: @escaping (_ response: Humans?, _ error: String?) -> Void) {
         
+        // Checking network connection.
         if connection() {
             guard let url = URL(string: HUMANS_URL) else { return }
             
@@ -22,6 +23,7 @@ class NetworkManager {
                 if let data = data {
                     var humans: Humans = try! JSONDecoder().decode(Humans.self, from: data)
                     
+                    // Getting avatar Data from URL for storing and offline usage.
                     for n in 0..<humans.humanDataArray.count {
                         let url = URL(string: humans.humanDataArray[n].avatar!)
                         if let data = try? Data(contentsOf: url!) {
@@ -36,7 +38,7 @@ class NetworkManager {
         } else {
             completion(nil, "No internet connection.")
         }
-
+        
     }
     
     func connection() -> Bool{

@@ -24,3 +24,9 @@ struct HumanData: Codable {
     var avatar: String?
     var avatarData: Data?
 }
+
+enum SortTypes: String {
+    case sort_off = "sort_off"
+    case ascending_true = "ascending_true"
+    case ascending_false = "ascending_false"
+}

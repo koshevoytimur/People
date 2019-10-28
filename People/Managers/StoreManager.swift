@@ -10,14 +10,14 @@ import Foundation
 
 class StoreManager {
     
-    func wrtiteHumans(humansToStore: Humans) {
+    func wrtiteHumansToLocalStorage(humansToStore: Humans) {
         let defaults = UserDefaults.standard
         defaults.set(try? PropertyListEncoder().encode(humansToStore), forKey: "humans")
         
         print("Humans stored")
     }
     
-    func getHumans() -> Humans? {
+    func fetchHumansFromLocalStorage() -> Humans? {
         let defaults = UserDefaults.standard
         
         if let humans =  defaults.object(forKey: "humans") as? Data {
@@ -31,15 +31,15 @@ class StoreManager {
         }
     }
     
-    func deleteHuman(id: Int) {
-        var humans = getHumans()
+    func deleteHumanFromLocalStorage(id: Int) {
+        var humans = fetchHumansFromLocalStorage()
         if let unwHumans = humans {
             for n in 0..<unwHumans.humanDataArray.count {
                 if unwHumans.humanDataArray[n].id == id {
                     humans!.humanDataArray.remove(at: n)
                 }
             }
-            wrtiteHumans(humansToStore: humans!)
+            wrtiteHumansToLocalStorage(humansToStore: humans!)
         }
     }
     

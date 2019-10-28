@@ -13,6 +13,7 @@ protocol PresenterDelegate: class {
 }
 
 class Presenter {
+    
     weak var delegate: PresenterDelegate?
     
     let networkManager = NetworkManager()
@@ -23,19 +24,18 @@ class Presenter {
     }
     
     func fetchHumans(completion: @escaping (_ humans: Humans?, _ error: String?) -> Void) {
-        
-        networkManager.getHumansURLSession { (response, error) in
-
+        networkManager.fetchHumans { (response, error) in
+            
             // Getting humans from network
             if let unwrResponse = response {
-                self.storeManager.wrtiteHumans(humansToStore: unwrResponse)
+                self.storeManager.wrtiteHumansToLocalStorage(humansToStore: unwrResponse)
                 completion(unwrResponse, nil)
-
-            // Getting humans from local storage if error occur
+                
+                // Getting humans from local storage if error occur
             } else {
                 print("Error occur while fetching humans from network: \(error!)")
-
-                let humans = self.storeManager.getHumans()
+                
+                let humans = self.storeManager.fetchHumansFromLocalStorage()
                 if humans != nil {
                     completion(humans, nil)
                 } else {
@@ -45,7 +45,7 @@ class Presenter {
         }
     }
     
-    func fetchFilteredHumans(sortTypeAscending: Bool?, str: String?, completion: @escaping (_ humanDataArray: [HumanData]?, _ error: String?) -> Void) {
+    func fetchFilteredHumans(sortTypeAscending: SortTypes, str: String?, completion: @escaping (_ humanDataArray: [HumanData]?, _ error: String?) -> Void) {
         fetchHumans { (humans, error) in
             if let error = error {
                 print(error)
@@ -60,25 +60,23 @@ class Presenter {
                         }
                     }
                     
-//                    sortedHumans = self.sortHumans(sortTypeAscending: sortTypeAscending, humanDataArray: sortedHumans)
+                    sortedHumans = self.sortHumans(sortTypeAscending: sortTypeAscending, humanDataArray: sortedHumans)
+                    
                     completion(sortedHumans, nil)
                 } else {
-                    completion(humans!.humanDataArray, nil)
-//                    sortedHumans = self.sortHumans(sortTypeAscending: sortTypeAscending, humanDataArray: humans!.humanDataArray)
-//                    completion(sortedHumans, nil)
+                    sortedHumans = self.sortHumans(sortTypeAscending: sortTypeAscending, humanDataArray: humans!.humanDataArray)
+                    completion(sortedHumans, nil)
                 }
             }
         }
     }
     
-    func fetchSortedHumans(sortTypeAscending: Int?, humanDataArray: [HumanData]) -> [HumanData] {
-        
+    func sortHumans(sortTypeAscending: SortTypes, humanDataArray: [HumanData]) -> [HumanData] {
+        print("sortTypeAscending: \(sortTypeAscending)")
         switch sortTypeAscending {
-        case 0:
-            return humanDataArray
-        case 1:
+        case .ascending_true:
             return humanDataArray.sorted(by: { $0.first_name! < $1.first_name! })
-        case 2:
+        case .ascending_false:
             return humanDataArray.sorted(by: { $0.first_name! > $1.first_name! })
         default:
             return humanDataArray
@@ -86,7 +84,7 @@ class Presenter {
     }
     
     func deleteHumanFromLocalStorage(id: Int) {
-        storeManager.deleteHuman(id: id)
+        storeManager.deleteHumanFromLocalStorage(id: id)
     }
     
 }
