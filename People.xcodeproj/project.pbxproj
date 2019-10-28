@@ -18,7 +18,8 @@
 		D908C9AC2365D92B005F6E87 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D908C9AB2365D92B005F6E87 /* AlertView.swift */; };
 		D92C295823650BF900B5DB70 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D92C295723650BF900B5DB70 /* StoreManager.swift */; };
 		D97E43F52363354800CE0DFC /* HumanTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D97E43F42363354800CE0DFC /* HumanTableViewCell.swift */; };
-		D9CBD49C23653A7300F069A5 /* Presenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CBD49B23653A7300F069A5 /* Presenter.swift */; };
+		D9A3BB3C23676FFC00F0CCC2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A3BB3B23676FFC00F0CCC2 /* Constants.swift */; };
+		D9CBD49C23653A7300F069A5 /* HumansPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CBD49B23653A7300F069A5 /* HumansPresenter.swift */; };
 		D9D05BAF2366248E0038538B /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9D05BAE2366248E0038538B /* RootViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -36,7 +37,8 @@
 		D908C9AB2365D92B005F6E87 /* AlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		D92C295723650BF900B5DB70 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
 		D97E43F42363354800CE0DFC /* HumanTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumanTableViewCell.swift; sourceTree = "<group>"; };
-		D9CBD49B23653A7300F069A5 /* Presenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presenter.swift; sourceTree = "<group>"; };
+		D9A3BB3B23676FFC00F0CCC2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		D9CBD49B23653A7300F069A5 /* HumansPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HumansPresenter.swift; sourceTree = "<group>"; };
 		D9D05BAE2366248E0038538B /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -55,6 +57,7 @@
 			isa = PBXGroup;
 			children = (
 				D9028ED72363299E00681517 /* People */,
+				D9028EE3236329A200681517 /* LaunchScreen.storyboard */,
 				D9028ED62363299E00681517 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -70,15 +73,13 @@
 		D9028ED72363299E00681517 /* People */ = {
 			isa = PBXGroup;
 			children = (
+				D9A3BB3D2367709200F0CCC2 /* Core */,
+				D9A3BB3A23676FE700F0CCC2 /* Constants */,
 				D9028EF223632E6C00681517 /* Managers */,
 				D9028EEE23632BCA00681517 /* Models */,
 				D9CD88772365CA8600C71709 /* Views */,
 				D9CBD49A23653A5100F069A5 /* Presenters */,
-				D9028ED82363299E00681517 /* AppDelegate.swift */,
-				D9028EDA2363299E00681517 /* SceneDelegate.swift */,
-				D9028EE1236329A100681517 /* Assets.xcassets */,
-				D9028EE3236329A200681517 /* LaunchScreen.storyboard */,
-				D9028EE6236329A200681517 /* Info.plist */,
+				D9A3BB3E236770AD00F0CCC2 /* Resources */,
 			);
 			path = People;
 			sourceTree = "<group>";
@@ -100,10 +101,36 @@
 			path = Managers;
 			sourceTree = "<group>";
 		};
+		D9A3BB3A23676FE700F0CCC2 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				D9A3BB3B23676FFC00F0CCC2 /* Constants.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		D9A3BB3D2367709200F0CCC2 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				D9028ED82363299E00681517 /* AppDelegate.swift */,
+				D9028EDA2363299E00681517 /* SceneDelegate.swift */,
+				D9028EE6236329A200681517 /* Info.plist */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		D9A3BB3E236770AD00F0CCC2 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				D9028EE1236329A100681517 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		D9CBD49A23653A5100F069A5 /* Presenters */ = {
 			isa = PBXGroup;
 			children = (
-				D9CBD49B23653A7300F069A5 /* Presenter.swift */,
+				D9CBD49B23653A7300F069A5 /* HumansPresenter.swift */,
 			);
 			path = Presenters;
 			sourceTree = "<group>";
@@ -192,10 +219,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D9D05BAF2366248E0038538B /* RootViewController.swift in Sources */,
+				D9A3BB3C23676FFC00F0CCC2 /* Constants.swift in Sources */,
 				D9028EED23632B3600681517 /* NetworkManager.swift in Sources */,
 				D9028EDD2363299E00681517 /* HumansViewController.swift in Sources */,
 				D908C9AC2365D92B005F6E87 /* AlertView.swift in Sources */,
-				D9CBD49C23653A7300F069A5 /* Presenter.swift in Sources */,
+				D9CBD49C23653A7300F069A5 /* HumansPresenter.swift in Sources */,
 				D97E43F52363354800CE0DFC /* HumanTableViewCell.swift in Sources */,
 				D9028ED92363299E00681517 /* AppDelegate.swift in Sources */,
 				D9028EDB2363299E00681517 /* SceneDelegate.swift in Sources */,
@@ -346,7 +374,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H9FL6Z93F8;
-				INFOPLIST_FILE = People/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/People/Core/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -364,7 +392,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = H9FL6Z93F8;
-				INFOPLIST_FILE = People/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/People/Core/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

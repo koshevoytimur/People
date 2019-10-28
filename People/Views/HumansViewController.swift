@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HumansViewController: RootViewController, PresenterDelegate {
+class HumansViewController: RootViewController, HumansPresenterDelegate {
     
     //MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
@@ -18,7 +18,7 @@ class HumansViewController: RootViewController, PresenterDelegate {
     @IBOutlet weak var selectWithLettersOutlet: UIButton!
     
     //MARK: - Properties
-    lazy var presenter = Presenter(with: self)
+    lazy var presenter = HumansPresenter(with: self)
     private let refreshControl = UIRefreshControl()
     private let alertView = AlertView()
     private let cellIdentifier = "humanCell"
@@ -49,13 +49,15 @@ class HumansViewController: RootViewController, PresenterDelegate {
     func loadHumans() {
         showSpinner()
         
-        var str: String? = nil
+        var charA: String? = nil
+        var charB: String? = nil
         
         if (!firstTextFieldOutlet.text!.isEmpty && !secondTextFieldOutlet.text!.isEmpty) && ((firstTextFieldOutlet.text! != " ") && (secondTextFieldOutlet.text! != " ")) {
-            str = firstTextFieldOutlet.text! + secondTextFieldOutlet.text!
+            charA = firstTextFieldOutlet.text!
+            charB = secondTextFieldOutlet.text!
         }
         
-        presenter.fetchFilteredHumans(sortTypeAscending: self.sortType, str: str) { (humanDataArray, error) in
+        presenter.fetchFilteredHumans(sortTypeAscending: self.sortType, charA: charA, charB: charB) { (humanDataArray, error) in
             if let unwrDataArray = humanDataArray {
                 self.humanDataArray = unwrDataArray
                 DispatchQueue.main.async {

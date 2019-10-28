@@ -9,7 +9,7 @@
 import UIKit
 
 class RootViewController: UIViewController {
-
+    
     var vSpinner = UIView.init(frame: .zero)
     var activityIndicator : UIActivityIndicatorView?
     var spinnerBack = UIView.init(frame: .zero)
@@ -18,7 +18,7 @@ class RootViewController: UIViewController {
         super.viewDidLoad()
         createSpiner()
     }
-
+    
     func createSpiner() {
         let radius : CGFloat = 24.0
         self.vSpinner = UIView.init(frame: self.view.bounds)
@@ -58,9 +58,9 @@ class GradientView: UIView {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-
+    
 }

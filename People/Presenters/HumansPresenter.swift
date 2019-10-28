@@ -8,18 +8,18 @@
 
 import Foundation
 
-protocol PresenterDelegate: class {
+protocol HumansPresenterDelegate: class {
     func loadHumans()
 }
 
-class Presenter {
+class HumansPresenter {
     
-    weak var delegate: PresenterDelegate?
+    weak var delegate: HumansPresenterDelegate?
     
     let networkManager = NetworkManager()
     let storeManager = StoreManager()
     
-    init(with delegate: PresenterDelegate) {
+    init(with delegate: HumansPresenterDelegate) {
         self.delegate = delegate
     }
     
@@ -45,7 +45,7 @@ class Presenter {
         }
     }
     
-    func fetchFilteredHumans(sortTypeAscending: SortTypes, str: String?, completion: @escaping (_ humanDataArray: [HumanData]?, _ error: String?) -> Void) {
+    func fetchFilteredHumans(sortTypeAscending: SortTypes, charA: String?, charB: String?, completion: @escaping (_ humanDataArray: [HumanData]?, _ error: String?) -> Void) {
         fetchHumans { (humans, error) in
             if let error = error {
                 print(error)
@@ -53,10 +53,12 @@ class Presenter {
             } else {
                 var sortedHumans = [HumanData]()
                 
-                if let str = str {
-                    for humanData in humans!.humanDataArray {
-                        if humanData.first_name!.contains(str) {
-                            sortedHumans.append(humanData)
+                if let charA = charA {
+                    if let charB = charB {
+                        for humanData in humans!.humanDataArray {
+                            if humanData.first_name!.lowercased().contains(charA.lowercased()) && humanData.first_name!.lowercased().contains(charB.lowercased()) {
+                                sortedHumans.append(humanData)
+                            }
                         }
                     }
                     

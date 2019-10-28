@@ -11,8 +11,6 @@ import SystemConfiguration
 
 class NetworkManager {
     
-    let HUMANS_URL = "https://reqres.in/api/users?page=2"
-    
     func fetchHumans(completion: @escaping (_ response: Humans?, _ error: String?) -> Void) {
         
         // Checking network connection.
